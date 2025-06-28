@@ -8,7 +8,7 @@ from rest_framework.routers import DefaultRouter
 from orders import views
 
 router = DefaultRouter()
-router.register(r'orders', views.OrderViewSet)
+router.register(r'', views.OrderViewSet)
 app_name = 'order'
 
 urlpatterns = [

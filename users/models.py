@@ -9,10 +9,12 @@ class User(AbstractUser):
     first_name = models.CharField('Имя', max_length=150, blank=True)
     last_name = models.CharField('Фамилия', max_length=150, blank=True)
     username = models.CharField(
-        'Имя пользователя', max_length=150, unique=True
+        'Имя пользователя',
+        max_length=150,
+        unique=True,
     )
-    password = models.CharField(('Пароль'), max_length=128)
-
+    email = models.EmailField('Email', unique=True, blank=True)
+    password = models.CharField('Пароль', max_length=128)
     age = models.PositiveSmallIntegerField(
         'Возраст',
         null=True,

@@ -27,6 +27,7 @@ class PublicUserApiTests(TestCase):
     def test_create_user_success(self):
         """Тест проверки создания юзера с валидными данными."""
         payload = {
+            'email': 'testmail@example.com',
             'username': 'testUsername',
             'password': 'testpass123',
             'name': 'Test User',
@@ -41,10 +42,26 @@ class PublicUserApiTests(TestCase):
     def test_user_with_username_exists_error(self):
         """
         Тест при попытке создания юзера с существующим username,
-        пробросасывается ошибка.
+        пробрасывается ошибка.
         """
         payload = {
+            'email': 'differentmail@example.com',
             'username': 'testUsername',
+            'password': 'testpass123',
+            'age': 30,
+        }
+        create_user(**payload)
+        res = self.client.post(CREATE_USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_user_with_email_exists_error(self):
+        """
+        Тест при попытке создания юзера с существующим email,
+        пробрасывается ошибка.
+        """
+        payload = {
+            'email': 'testmail@example.com',
+            'username': 'testdiffUsername',
             'password': 'testpass123',
             'age': 30,
         }
@@ -58,6 +75,7 @@ class PublicUserApiTests(TestCase):
         пробрасывается ошибка.
         """
         payload = {
+            'email': 'testmail@example.com',
             'username': 'testUsername',
             'password': 'te',
             'age': 30,
@@ -74,12 +92,14 @@ class PublicUserApiTests(TestCase):
     def test_create_token_for_user(self):
         """Тест корректного создания токена для валидных данных юзера."""
         user_details = {
+            'email': 'testdiffmail@example.com',
             'username': 'testUsername',
             'password': 'testpass123',
             'age': 30,
         }
         create_user(**user_details)
         payload = {
+            'email': user_details['email'],
             'username': user_details['username'],
             'password': user_details['password'],
         }
@@ -90,12 +110,14 @@ class PublicUserApiTests(TestCase):
     def test_create_token_incorrect_password(self):
         """Тест случая попытки получения токена с некорректным паролем."""
         user_details = {
+            'email': 'testmail@example.com',
             'username': 'testUsername',
             'password': 'goodpassword123',
             'age': 30,
         }
         create_user(**user_details)
         payload = {
+            'email': user_details['email'],
             'username': user_details['username'],
             'password': 'differentpassword123',
         }
@@ -104,8 +126,9 @@ class PublicUserApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_blank_password(self):
-        """Тест случая попытки получения токена с некорректным паролем."""
+        """Тест случая попытки получения токена с пустым паролем."""
         payload = {
+            'email': 'testmail@example.com',
             'username': 'testUsername',
             'password': '',
             'age': 30,

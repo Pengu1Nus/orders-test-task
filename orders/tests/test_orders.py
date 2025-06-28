@@ -31,9 +31,12 @@ def create_order(user, **params):
     return order
 
 
-def create_user(username='testUser', password='testpass1223'):
+def create_user(
+    email='testmail@example.com', username='testUser', password='testpass1223'
+):
     """Вспомогательная функция — создает и возвращает пользователя."""
     return get_user_model().objects.create_user(
+        email=email,
         username=username,
         password=password,
     )
@@ -44,7 +47,11 @@ class PublicOrderApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(username='testUser1', password='testpass123')
+        self.user = create_user(
+            email='testnewmail@example.com',
+            username='testUser1',
+            password='testpass123',
+        )
         self.order = Order.objects.create(
             name='Тестовый заказ',
             description='Описание тестового заказа',
@@ -90,7 +97,11 @@ class PrivateOrdersApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(username='testUser1', password='testpass123')
+        self.user = create_user(
+            email='testnewmail@example.com',
+            username='testUser1',
+            password='testpass123',
+        )
         self.client.force_authenticate(self.user)
 
     def test_retrieve_orders(self):
@@ -154,7 +165,11 @@ class PrivateOrdersApiTests(TestCase):
         Тест — попытка изменения автора заказа
         не приводит к изменению автора заказа.
         """
-        new_user = create_user(username='testUser2', password='test123')
+        new_user = create_user(
+            email='testsecondmail@example.com',
+            username='testUser2',
+            password='test123',
+        )
         order = create_order(user=self.user)
 
         payload = {'user': new_user.id}
@@ -176,7 +191,11 @@ class PrivateOrdersApiTests(TestCase):
 
     def test_delete_other_users_order_error(self):
         """Тест — попытка удаления заказа другого автора возвращает ошибку."""
-        new_user = create_user(username='testAnotherUser2', password='test123')
+        new_user = create_user(
+            email='testdiffmail@example.com',
+            username='testAnotherUser2',
+            password='test123',
+        )
         order = create_order(user=new_user)
 
         url = detail_url(order.id)
