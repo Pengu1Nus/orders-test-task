@@ -1,3 +1,7 @@
+"""
+Тесты модели пользователя.
+"""
+
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.test import TestCase
@@ -12,13 +16,16 @@ class UserModelTest(TestCase):
         """Тест создания пользователя с валидными данными."""
         username = 'TestUser'
         password = 'testPass123'
+        age = 28
 
         user = User.objects.create_user(
             username=username,
             password=password,
+            age=age,
         )
 
         self.assertEqual(user.username, username)
+        self.assertEqual(user.age, age)
         self.assertTrue(user.check_password(password))
 
     def test_create_user_without_username_raises_error(self):
