@@ -13,11 +13,7 @@ services:
     volumes:
       - dev-static-data:/vol/web
       - ./app:/app/src
-      # Команда, которая будет запускать сервис
-      # Это будет команда по умолчанию
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+
     environment:
       - DB_HOST=db
       - DB_NAME=devdb

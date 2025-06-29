@@ -12,9 +12,6 @@ ENV PATH="/root/.local/bin:$PATH"
 
 WORKDIR /app
 
-# COPY ./pyproject.toml .
-# COPY ./poetry.lock .
-# COPY ./README.md .
 COPY . .
 
 RUN poetry config virtualenvs.in-project true \
@@ -46,4 +43,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 USER django-user
 WORKDIR /app/src
-CMD ["./run.sh"]
+CMD ["../run.sh"]
