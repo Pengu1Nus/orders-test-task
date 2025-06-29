@@ -1,2 +1,2 @@
-# orders-test-task
+# orders_test_task
 Тестовое задание Backend Developer
