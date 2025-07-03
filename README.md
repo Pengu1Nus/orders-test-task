@@ -24,6 +24,7 @@
    git clone https://github.com/Pengu1Nus/orders-test-task.git
    cd orders-test-task
     ```
+1.1 Скопируйте переменные окружения из `.env.example` -> `.env`
 
 2. Запустить контейнеры:
 
